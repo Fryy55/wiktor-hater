@@ -28,7 +28,7 @@ int main() {
 	});
 
 	bot.on_message_create([&bot](message_create_t const& event) {
-		if (event.msg.author.username == "fryy_55") {
+		if (event.msg.author.username == "wdwiktor") {
 			bot.message_add_reaction(event.msg, "❌");
 			return;
 		}
