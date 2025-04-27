@@ -45,8 +45,6 @@ int main() {
 			(
 				lowercase<char>(event.msg.content).find("wik") != event.msg.content.npos
 				||
-				lowercase<char>(event.msg.content).find("wiktor") != event.msg.content.npos
-				||
 				mentionedWik
 			)
 		)
