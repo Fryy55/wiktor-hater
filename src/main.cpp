@@ -70,7 +70,12 @@ int main() {
 
 	bot.on_message_create([&bot](message_create_t const& event) {
 		if (event.msg.author.username == "wdwiktor") {
-			bot.message_add_reaction(event.msg, "❌");
+			bot.message_add_reaction(event.msg, "❌", [event](confirmation_callback_t const& callback) {
+				if (callback.is_error())
+					event.reply("unblock me bozo :middle_finger:", true);
+
+				return;
+			});
 			return;
 		}
 
