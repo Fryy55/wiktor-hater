@@ -7,10 +7,13 @@ using namespace dpp;
 
 int main() {
 	cluster bot(BOT_TOKEN, i_default_intents | i_message_content);
+	std::ofstream O("C:/Users/User/Desktop/debug_hater.txt", std::ofstream::out | std::ofstream::trunc);
+	O.close();
 
-	std::ofstream O("C:/Users/User/Desktop/debug_hater.txt");
-	bot.on_log([&O](log_t const& log) {
+	bot.on_log([](log_t const& log) {
 		using namespace std::chrono;
+
+		std::ofstream O("C:/Users/User/Desktop/debug_hater.txt", std::ofstream::app);
 
 		char const* severity;
 		switch (log.severity) {
@@ -40,6 +43,7 @@ int main() {
 		auto fmt = "%a %b %d %I:%M:%S %p %Y";
 
 		O << '[' << std::put_time(&now_tm, fmt) << "] " << severity << log.message << '\n';
+		O.close();
 		std::cout << '[' << std::put_time(&now_tm, fmt) << "] " << severity << log.message << '\n';
 
 		return;
