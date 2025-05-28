@@ -1,4 +1,5 @@
 #include <dpp/dpp.h>
+#include <fstream>
 #include "secrets.hpp"
 
 using namespace dpp;
@@ -6,7 +7,43 @@ using namespace dpp;
 
 int main() {
 	cluster bot(BOT_TOKEN, i_default_intents | i_message_content);
-	bot.on_log(utility::cout_logger());
+
+	std::ofstream O("C:/Users/User/Desktop/debug_hater.txt");
+	bot.on_log([&O](log_t const& log) {
+		using namespace std::chrono;
+
+		char const* severity;
+		switch (log.severity) {
+			case loglevel::ll_debug:
+				severity = "DEBUG: ";
+				break;
+			case loglevel::ll_info:
+				severity = "INFO: ";
+				break;
+			case loglevel::ll_warning:
+				severity = "WARNING: ";
+				break;
+			case loglevel::ll_error:
+				severity = "ERROR: ";
+				break;
+			case loglevel::ll_critical:
+				severity = "CRITICAL: ";
+				break;
+			default:
+				return;
+		}
+
+		auto now_tt = system_clock::to_time_t(system_clock::now());
+		tm now_tm;
+		localtime_s(&now_tm, &now_tt);
+
+		auto fmt = "%a %b %d %I:%M:%S %p %Y";
+
+		O << '[' << std::put_time(&now_tm, fmt) << "] " << severity << log.message << '\n';
+		std::cout << '[' << std::put_time(&now_tm, fmt) << "] " << severity << log.message << '\n';
+
+		return;
+	});
 
 	bot.on_ready([&bot](ready_t const& event) {
 		if (run_once<struct CmdRegister>()) {
@@ -53,5 +90,6 @@ int main() {
 
 	bot.start(st_wait);
 
+	O.close();
 	return 0;
 }
