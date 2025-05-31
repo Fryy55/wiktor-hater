@@ -1,53 +1,16 @@
 #include <dpp/dpp.h>
 #include <fstream>
 #include "secrets.hpp"
+#include "include/logger.hpp"
 
 using namespace dpp;
 
 
-int main() {
+void startup() {
 	cluster bot(BOT_TOKEN, i_default_intents | i_message_content);
-	std::ofstream O("C:/Users/User/Desktop/debug_hater.txt", std::ofstream::out | std::ofstream::trunc);
-	O.close();
 
-	bot.on_log([](log_t const& log) {
-		using namespace std::chrono;
-
-		std::ofstream O("C:/Users/User/Desktop/debug_hater.txt", std::ofstream::app);
-
-		char const* severity;
-		switch (log.severity) {
-			case loglevel::ll_debug:
-				severity = "DEBUG: ";
-				break;
-			case loglevel::ll_info:
-				severity = "INFO: ";
-				break;
-			case loglevel::ll_warning:
-				severity = "WARNING: ";
-				break;
-			case loglevel::ll_error:
-				severity = "ERROR: ";
-				break;
-			case loglevel::ll_critical:
-				severity = "CRITICAL: ";
-				break;
-			default:
-				return;
-		}
-
-		auto now_tt = system_clock::to_time_t(system_clock::now());
-		tm now_tm;
-		localtime_s(&now_tm, &now_tt);
-
-		auto fmt = "%a %b %d %I:%M:%S %p %Y";
-
-		O << '[' << std::put_time(&now_tm, fmt) << "] " << severity << log.message << '\n';
-		O.close();
-		std::cout << '[' << std::put_time(&now_tm, fmt) << "] " << severity << log.message << '\n';
-
-		return;
-	});
+	utility::logger logger;
+	bot.on_log(logger);
 
 	bot.on_ready([&bot](ready_t const& event) {
 		if (run_once<struct CmdRegister>()) {
@@ -99,6 +62,21 @@ int main() {
 
 	bot.start(st_wait);
 
-	O.close();
+	return;
+}
+
+int main() {
+	utility::logger::preinit("C:/Users/User/Desktop/debug_hater");
+	size_t startupCount = 1;
+	utility::logger::logStartup(1);
+	while (true) {
+		try {
+			startup();
+		} catch (...) {
+			++startupCount;
+			utility::logger::logStartup(startupCount);
+		}
+	}
+
 	return 0;
 }
