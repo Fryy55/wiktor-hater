@@ -1,15 +1,20 @@
 cmake_minimum_required(VERSION 3.10)
-project(wiktorhater)
+project(WiktorHater)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_BUILD_TYPE Release)
 
-include_directories(SYSTEM "D:/libs/D++ v10.1/include/dpp-10.1")
-link_directories("D:/libs/D++ v10.1/lib/dpp-10.1")
+include_directories(SYSTEM "D:/libs/D++ v10.1.3/include/dpp-10.1")
+link_directories("D:/libs/D++ v10.1.3/lib/dpp-10.1")
 
-add_executable(wiktorhater
-    src/main.cpp
-    src/include/logger.cpp
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/*.cpp)
+add_executable(${PROJECT_NAME} ${SOURCES})
+set(SRC_DIR ${PROJECT_SOURCE_DIR}/src)
+target_include_directories(${PROJECT_NAME}
+    PRIVATE
+        ${SRC_DIR}
+        ${SRC_DIR}/general-purpose
 )
-set_target_properties(wiktorhater PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin$<0:>)
-target_link_libraries(wiktorhater dpp)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin$<0:>)
+target_link_libraries(${PROJECT_NAME} dpp)

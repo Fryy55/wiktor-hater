@@ -1,16 +1,15 @@
 #include <dpp/dpp.h>
-#include <fstream>
+
 #include "secrets.hpp"
-#include "include/logger.hpp"
+#include "logger.hpp"
 
 using namespace dpp;
 
 
-void startup() {
+int main() {
 	cluster bot(BOT_TOKEN, i_default_intents | i_message_content);
 
-	utility::logger logger;
-	bot.on_log(logger);
+	bot.on_log(utility::logger("C:/Users/User/Desktop/debug_hater"));
 
 	bot.on_ready([&bot](ready_t const& event) {
 		if (run_once<struct CmdRegister>()) {
@@ -26,9 +25,9 @@ void startup() {
 		bot.set_presence(presence(ps_online, at_watching, "wiktor's downfall!"));
 	});
 
-	bot.on_slashcommand([&bot](slashcommand_t const& event) {
+	bot.on_slashcommand([](slashcommand_t const& event) {
 		if (event.command.get_command_name() == "hate-wik")
-			event.reply(message().add_file("kill.jpg", utility::read_file("C:\\Users\\User\\Pictures\\Camera Roll\\kill.jpg")));
+			event.reply(message().add_file("kill.jpg", utility::read_file(R"(C:\Users\User\Pictures\Camera Roll\kill.jpg)")));
 	});
 
 	bot.on_message_create([&bot](message_create_t const& event) {
@@ -44,9 +43,11 @@ void startup() {
 
 
 		bool mentionedWik = false;
-		for (auto ping : event.msg.mentions)
-			if (mentionedWik = ping.first.username == "wdwiktor")
+		for (auto const& ping : event.msg.mentions)
+			if (ping.first.username == "wdwiktor") {
+				mentionedWik = true;
 				break;
+			}
 
 		if (
 			event.msg.author.format_username() != "wiktor hater#7539"
@@ -61,22 +62,6 @@ void startup() {
 	});
 
 	bot.start(st_wait);
-
-	return;
-}
-
-int main() {
-	utility::logger::preinit("C:/Users/User/Desktop/debug_hater");
-	size_t startupCount = 1;
-	utility::logger::logStartup(1);
-	while (true) {
-		try {
-			startup();
-		} catch (...) {
-			++startupCount;
-			utility::logger::logStartup(startupCount);
-		}
-	}
 
 	return 0;
 }
