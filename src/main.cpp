@@ -1,15 +1,22 @@
 #include <dpp/dpp.h>
 
+#include <bismuth/classes/logger.hpp>
+#include <aurora/aurora.hpp>
+
 #include "secrets.hpp"
-#include "logger.hpp"
 
 using namespace dpp;
+using namespace aurora;
 
 
 int main() {
 	cluster bot(BOT_TOKEN, i_default_intents | i_message_content);
 
-	bot.on_log(utility::logger("C:/Users/User/Desktop/debug_hater"));
+	log::set12hTimeEnabled(true);
+	log::setFileLogLevel(log::LogLevel::Debug);
+	TargetManager::get()->logToDir(std::format("{}/Desktop/logs/hater", std::getenv("HOME")), "Hater");
+	ThreadManager::get()->addThread("Main");
+	bot.on_log(bismuth::logger());
 
 	bot.on_ready([&bot](ready_t const& event) {
 		if (run_once<struct CmdRegister>()) {
@@ -27,7 +34,7 @@ int main() {
 
 	bot.on_slashcommand([](slashcommand_t const& event) {
 		if (event.command.get_command_name() == "hate-wik")
-			event.reply(message().add_file("kill.jpg", utility::read_file(R"(C:\Users\User\Pictures\Camera Roll\kill.jpg)")));
+			event.reply(message().add_file("kill.jpg", utility::read_file("/home/fryy_55/Pictures/Camera Roll/kill.jpg")));
 	});
 
 	bot.on_message_create([&bot](message_create_t const& event) {
