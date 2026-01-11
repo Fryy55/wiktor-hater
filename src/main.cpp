@@ -49,22 +49,41 @@ int main() {
 		}
 
 
-		bool mentionedWik = false;
-		for (auto const& ping : event.msg.mentions)
-			if (ping.first.username == "wdwiktor") {
-				mentionedWik = true;
-				break;
+		bool mentionedWik = lowercase<char>(event.msg.content).find("wik") != event.msg.content.npos;
+		bool pingedWik = false;
+		bool pingedBot = false;
+		std::string_view botUsername = "wiktor hater#7539";
+		for (auto const& ping : event.msg.mentions) {
+			if (!pingedWik && ping.first.username == "wdwiktor") {
+				pingedWik = true;
+				continue;
+			}
+			if (!pingedBot && ping.first.format_username() == botUsername) {
+				pingedBot = true;
+				continue;
 			}
 
-		if (
-			event.msg.author.format_username() != "wiktor hater#7539"
+			if (pingedWik && pingedBot)
+				break;
+		}
+
+
+		std::string_view botPingReply = "HIIIIIIIIIIIIIIIIIIIIII!!!!";
+		if (pingedBot && (!mentionedWik && !pingedWik))
+			event.reply(botPingReply);
+		else if (
+			event.msg.author.format_username() != botUsername
 			&&
 			(
-				lowercase<char>(event.msg.content).find("wik") != event.msg.content.npos
-				||
 				mentionedWik
+				||
+				pingedWik
 			)
-		) event.reply(std::string("wiktor mentioned ") + (mentionedWik ? "(literally) " : "") + " :thumbsdown:");
+		) event.reply(std::format(
+			"{}{}wiktor mentioned {}:thumbsdown:",
+			pingedBot ? botPingReply : "", pingedBot ? "\n\nbtw, " : "",
+			pingedWik ? "(literally) " : ""
+		));
 	});
 
 	bot.start(st_wait);
