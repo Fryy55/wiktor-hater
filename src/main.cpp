@@ -10,7 +10,7 @@ using namespace aurora;
 
 
 int main() {
-	cluster bot(BOT_TOKEN, i_default_intents | i_message_content);
+	cluster bot(secrets::BOT_TOKEN, i_default_intents | i_message_content);
 
 	log::set12hTimeEnabled(true);
 	log::setFileLogLevel(log::LogLevel::Debug);
@@ -64,8 +64,7 @@ int main() {
 				||
 				mentionedWik
 			)
-		)
-			event.reply(std::string("wiktor mentioned ") + (mentionedWik ? "(literally) " : "") + " :thumbsdown:");
+		) event.reply(std::string("wiktor mentioned ") + (mentionedWik ? "(literally) " : "") + " :thumbsdown:");
 	});
 
 	bot.start(st_wait);
