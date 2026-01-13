@@ -16,5 +16,5 @@ set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJ
 target_link_libraries(${PROJECT_NAME} dpp)
 
 include("cmake/CPM.cmake")
-CPMAddPackage("gh:Fryy55/bismuth@1.0.1")
+CPMAddPackage("gh:Fryy55/bismuth@1.1.0")
 target_link_libraries(${PROJECT_NAME} bismuth)

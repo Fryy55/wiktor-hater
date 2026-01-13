@@ -1,7 +1,7 @@
 #pragma once
 
 #include <array>
-#include <random>
+#include <bismuth/utils/random.hpp>
 
 
 namespace data {
@@ -185,12 +185,10 @@ inline constexpr std::array roasts{
 };
 
 inline std::string_view getRoast() noexcept {
-	thread_local std::mt19937_64 mt(std::random_device{}());
-
 	using Size = std::uint8_t;
 	static_assert(roasts.size() <= std::numeric_limits<Size>::max());
 
-	return roasts[std::uniform_int_distribution<Size>{0u, roasts.size() - 1u}(mt)];
+	return roasts[bismuth::utils::random<Size>(0u, roasts.size() - 1u)];
 }
 
 } // namespace data

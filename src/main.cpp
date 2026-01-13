@@ -23,19 +23,41 @@ int main() {
 		if (run_once<struct CmdRegister>()) {
 			std::vector<slashcommand> commands {
 				{ "hate-wik", "hates the wiktor with an image!", bot.me.id },
+				{ "expose-wik", "hates the wiktor with an exposed image!", bot.me.id }
 			};
-			for (slashcommand command : commands)
+			for (auto& command : commands)
 				command.set_interaction_contexts({itc_guild});
 
 			bot.global_bulk_command_create(commands);
 		}
 
-		bot.set_presence(presence(ps_online, at_watching, "wiktor's downfall!"));
+		bot.set_presence({ ps_online, at_watching, "wiktor's downfall!" });
 	});
 
 	bot.on_slashcommand([](slashcommand_t const& event) {
-		if (event.command.get_command_name() == "hate-wik")
+		auto command = event.command.get_command_name();
+
+		if (command == "hate-wik") {
 			event.reply(message().add_file("kill.jpg", utility::read_file("/home/fryy_55/Pictures/Camera Roll/kill.jpg")));
+		} else if (command == "expose-wik") {
+			namespace fs = std::filesystem;
+
+			std::vector<fs::directory_entry> exposedFolder{};
+			for (auto const& file : fs::directory_iterator("/home/fryy_55/Pictures/tsl brainrot/exposed/wiktor"))
+				exposedFolder.emplace_back(file);
+
+			auto const& file = exposedFolder[bismuth::utils::random(0u, exposedFolder.size() - 1u)].path();
+
+			event.reply(
+				message()
+					.add_file("wiktro.png", utility::read_file(file))
+					.add_embed(embed()
+						.set_color(colors::white)
+						.set_title(file.stem().string().substr(8u))
+						.set_image("attachment://wiktro.png")
+					)
+			);
+		}
 	});
 
 	bot.on_message_create([&bot](message_create_t const& event) {
