@@ -48,7 +48,7 @@ int main() {
 		}
 
 		if (event.msg.mention_everyone || event.msg.content.contains("@everyone")) {
-			event.reply("@ EVERYONE WOOOOOOOOOOO !!! :speaking_head: :bangbang:")
+			event.reply("EVERYONE MENTIONED WOOOOOOOOOOO !!! :speaking_head: :bangbang:", true);
 
 			return;
 		}
