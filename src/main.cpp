@@ -4,6 +4,7 @@
 #include <aurora/aurora.hpp>
 
 #include "secrets.hpp"
+#include "roasts.hpp"
 
 using namespace dpp;
 using namespace aurora;
@@ -54,7 +55,13 @@ int main() {
 		}
 
 
-		bool mentionedWik = lowercase<char>(event.msg.content).find("wik") != event.msg.content.npos;
+		auto lowercaseMsg = lowercase<char>(event.msg.content);
+		bool mentionedWik = lowercaseMsg.contains("wik");
+		if (mentionedWik && lowercaseMsg.contains("good")) {
+			event.reply(data::getRoast());
+
+			return;
+		}
 		bool pingedWik = false;
 		bool pingedBot = false;
 		std::string_view botUsername = "wiktor hater#7539";

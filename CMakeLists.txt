@@ -9,7 +9,7 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 set(SRC_DIR ${PROJECT_SOURCE_DIR}/src)
 target_include_directories(${PROJECT_NAME}
     PRIVATE
-        ${SRC_DIR}/
+        ${SRC_DIR}/data
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin$<0:>)
