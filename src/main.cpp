@@ -48,7 +48,7 @@ int main() {
 		}
 
 		if (event.msg.mention_everyone || event.msg.content.contains("@everyone")) {
-			event.reply("EVERYONE MENTIONED WOOOOOOOOOOO !!! :speaking_head: :bangbang:", true);
+			event.reply("EVERYONE MENTIONED WOOOOOOOOOOO!!! :speaking_head: :bangbang:", true);
 
 			return;
 		}
@@ -73,7 +73,7 @@ int main() {
 		}
 
 
-		std::string_view botPingReply = "HIIIIIIIIIIIIIIIIIIIIII!!!!";
+		std::string_view botPingReply = "HIIIIIIIIIIIIIIIIIIIIII !!!!";
 		if (pingedBot && (!mentionedWik && !pingedWik))
 			event.reply(botPingReply);
 		else if (
