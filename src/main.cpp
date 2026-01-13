@@ -42,9 +42,14 @@ int main() {
 			bot.message_add_reaction(event.msg, "❌", [event](confirmation_callback_t const& callback) {
 				if (callback.is_error())
 					event.reply("unblock me bozo :middle_finger:", true);
-
-				return;
 			});
+
+			return;
+		}
+
+		if (event.msg.mention_everyone || event.msg.content.contains("@everyone")) {
+			event.reply("@ EVERYONE WOOOOOOOOOOO !!! :speaking_head: :bangbang:")
+
 			return;
 		}
 
